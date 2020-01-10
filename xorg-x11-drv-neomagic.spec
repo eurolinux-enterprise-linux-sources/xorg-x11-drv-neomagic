@@ -4,15 +4,14 @@
 
 Summary:   Xorg X11 neomagic video driver
 Name:      xorg-x11-drv-neomagic
-Version:   1.2.7
-Release:   7%{?dist}
+Version:   1.2.9
+Release:   1%{?dist}
 URL:       http://www.x.org
 License:   MIT
 Group:     User Interface/X Hardware Support
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Source0:   ftp://ftp.x.org/pub/individual/driver/%{tarball}-%{version}.tar.bz2
-Patch0:    neo-1.2.7-git.patch
 
 ExclusiveArch: %{ix86}
 
@@ -26,7 +25,6 @@ X.Org X11 neomagic video driver.
 
 %prep
 %setup -q -n %{tarball}-%{version}
-%patch0 -p1
 
 %build
 %configure --disable-static
@@ -50,6 +48,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man4/neomagic.4*
 
 %changelog
+* Wed Nov 11 2015 Adam Jackson <ajax@redhat.com> 1.2.9-1
+- neomagic 1.2.9
+
 * Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.7-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
