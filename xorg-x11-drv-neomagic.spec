@@ -5,31 +5,28 @@
 Summary:   Xorg X11 neomagic video driver
 Name:      xorg-x11-drv-neomagic
 Version:   1.2.7
-Release:   3%{?dist}
+Release:   7%{?dist}
 URL:       http://www.x.org
 License:   MIT
 Group:     User Interface/X Hardware Support
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 Source0:   ftp://ftp.x.org/pub/individual/driver/%{tarball}-%{version}.tar.bz2
-Source1:   neomagic.xinf
-
-Patch1:    fix-no-xaa.patch
+Patch0:    neo-1.2.7-git.patch
 
 ExclusiveArch: %{ix86}
 
 BuildRequires: pkgconfig
-BuildRequires: xorg-x11-server-devel >= 1.10.99.902
+BuildRequires: xorg-x11-server-devel >= 1.4.99.1
 
-Requires:  Xorg %(xserver-sdk-abi-requires ansic)
-Requires:  Xorg %(xserver-sdk-abi-requires videodrv)
+Requires:  xorg-x11-server-Xorg >= 1.4.99.1
 
 %description 
 X.Org X11 neomagic video driver.
 
 %prep
 %setup -q -n %{tarball}-%{version}
-%patch1 -p1 -b .xaa
+%patch0 -p1
 
 %build
 %configure --disable-static
@@ -39,9 +36,6 @@ make
 rm -rf $RPM_BUILD_ROOT
 
 make install DESTDIR=$RPM_BUILD_ROOT
-
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/hwdata/videoaliases
-install -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/hwdata/videoaliases/
 
 # FIXME: Remove all libtool archives (*.la) from modules directory.  This
 # should be fixed in upstream Makefile.am or whatever.
@@ -53,21 +47,50 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %{driverdir}/neomagic_drv.so
-%{_datadir}/hwdata/videoaliases/neomagic.xinf
 %{_mandir}/man4/neomagic.4*
 
 %changelog
-* Tue Aug 29 2012 Jerome Glisse <jglisse@redhat.com> 1.2.7-3
-- Resolves: #835244
+* Sun Aug 04 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.7-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
 
-* Tue Aug 07 2012 Jerome Glisse <jglisse@redhat.com> 1.2.7-2
-- Fix unknown symbol
+* Thu Mar 07 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.7-6
+- require xorg-x11-server-devel, not -sdk
 
-* Mon Aug 06 2012 Jerome Glisse <jglisse@redhat.com> 1.2.7-1
-- latest upstream release 1.2.7
+* Thu Mar 07 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.7-5
+- ABI rebuild
 
-* Tue Jun 28 2011 Ben Skeggs <bskeggs@redhat.com> 1.2.5-1
-- upstream release 1.2.5
+* Fri Feb 15 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.7-4
+- ABI rebuild
+
+* Fri Feb 15 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.7-3
+- ABI rebuild
+
+* Thu Jan 10 2013 Adam Jackson <ajax@redhat.com> - 1.2.7-2
+- ABI rebuild
+
+* Mon Aug 06 2012 Dave Airlie <airlied@redhat.com> 1.2.7-1
+- update to latest upstream to fix build
+
+* Sun Jul 22 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.6-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Fri Apr 27 2012 Adam Jackson <ajax@redhat.com> 1.2.6-1
+- neomagic 1.2.6
+
+* Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.5-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Tue Feb 08 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Mon Jul 05 2010 Dave Airlie <airlied@redhat.com> 1.2.5-1
+- update to latest release for server 1.9
+
+* Mon Jul 05 2010 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.4-4
+- rebuild for X Server 1.9
+
+* Thu Jan 21 2010 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.4-3
+- Rebuild for server 1.8
 
 * Mon Oct 26 2009 Adam Jackson <ajax@redhat.com> 1.2.4-2
 - neomagic-usleep.patch: Fix for new server ABI. (#523800)
