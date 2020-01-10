@@ -4,8 +4,8 @@
 
 Summary:   Xorg X11 neomagic video driver
 Name:      xorg-x11-drv-neomagic
-Version:   1.2.4
-Release:   2%{?dist}
+Version:   1.2.5
+Release:   1%{?dist}
 URL:       http://www.x.org
 License:   MIT
 Group:     User Interface/X Hardware Support
@@ -14,21 +14,22 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Source0:   ftp://ftp.x.org/pub/individual/driver/%{tarball}-%{version}.tar.bz2
 Source1:   neomagic.xinf
 
-Patch0:	    neomagic-usleep.patch
+#Patch0:	    neomagic-usleep.patch
 
 ExclusiveArch: %{ix86}
 
 BuildRequires: pkgconfig
 BuildRequires: xorg-x11-server-sdk >= 1.4.99.1
 
-Requires:  xorg-x11-server-Xorg >= 1.4.99.1
+Requires:  Xorg %(xserver-sdk-abi-requires ansic)
+Requires:  Xorg %(xserver-sdk-abi-requires videodrv)
 
 %description 
 X.Org X11 neomagic video driver.
 
 %prep
 %setup -q -n %{tarball}-%{version}
-%patch0 -p1 -b .usleep
+#%patch0 -p1 -b .usleep
 
 %build
 %configure --disable-static
@@ -56,6 +57,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man4/neomagic.4*
 
 %changelog
+* Tue Jun 28 2011 Ben Skeggs <bskeggs@redhat.com> 1.2.5-1
+- upstream release 1.2.5
+
 * Mon Oct 26 2009 Adam Jackson <ajax@redhat.com> 1.2.4-2
 - neomagic-usleep.patch: Fix for new server ABI. (#523800)
 
